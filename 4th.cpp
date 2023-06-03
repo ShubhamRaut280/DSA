@@ -69,6 +69,7 @@ class BST {
 
     void invert() {
         invertTree(root);
+        
     }
 
     bool searchUtil(Node* node, int d) {

@@ -4,14 +4,16 @@ using namespace std;
 // 9
 
 // AVL Node
-class Node {
-    public:
+class Node
+{
+public:
     string data;
-    Node* left;
-    Node* right;
+    Node *left;
+    Node *right;
     int balanceFactor;
 
-    Node(string d) {
+    Node(string d)
+    {
         data = d;
         left = NULL;
         right = NULL;
@@ -19,49 +21,60 @@ class Node {
     }
 };
 
-class AVLTree {
-    
-    private:
-    Node* root;
+class AVLTree
+{
 
-    public:
-    AVLTree() {
+private:
+    Node *root;
+
+public:
+    AVLTree()
+    {
         root = NULL;
     }
 
-    void insert(string data) {
+    void insert(string data)
+    {
         root = insertNode(root, data);
     }
 
-    bool search(string& data) {
+    bool search(string &data)
+    {
         return searchNode(root, data);
     }
 
-    void deleteNode(string& data) {
+    void deleteNode(string &data)
+    {
         root = deleteNode(root, data);
     }
 
-    void printSorted() {
+    void printSorted()
+    {
         cout << "Sorted: ";
         inorder(this->root);
         cout << endl;
     }
 
-    private:
-    Node* insertNode(Node* node, string& data) {
+private:
+    Node *insertNode(Node *node, string &data)
+    {
 
-        if(node == NULL){
+        if (node == NULL)
+        {
             return new Node(data);
         }
 
         // Find location to insert
-        if(data < node->data){
+        if (data < node->data)
+        {
             node->left = insertNode(node->left, data);
-        } 
-        else if(data > node->data){
+        }
+        else if (data > node->data)
+        {
             node->right = insertNode(node->right, data);
-        } 
-        else {
+        }
+        else
+        {
             return node;
         }
 
@@ -69,20 +82,26 @@ class AVLTree {
         node->balanceFactor = getHeight(node->left) - getHeight(node->right);
 
         // Perform rotations if necessary
-        if(node->balanceFactor > 1) {
-            if(data < node->left->data){ // Right Rotation
+        if (node->balanceFactor > 1)
+        {
+            if (data < node->left->data)
+            { // Right Rotation
                 node = rotateRight(node);
-            } 
-            else { // LR Rotation
+            }
+            else
+            { // LR Rotation
                 node->left = rotateLeft(node->left);
                 node = rotateRight(node);
             }
-        } 
-        else if(node->balanceFactor < -1){
-            if(data > node->right->data) { // Left Rotation
+        }
+        else if (node->balanceFactor < -1)
+        {
+            if (data > node->right->data)
+            { // Left Rotation
                 node = rotateLeft(node);
-            } 
-            else { // RL Rotation
+            }
+            else
+            { // RL Rotation
                 node->right = rotateRight(node->right);
                 node = rotateLeft(node);
             }
@@ -91,64 +110,86 @@ class AVLTree {
         return node;
     }
 
-    bool searchNode(Node* node, string& data) {
+    bool searchNode(Node *node, string &data)
+    {
 
-        if(node == NULL){
+        if (node == NULL)
+        {
             return false;
         }
 
-        if(data == node->data){
+        if (data == node->data)
+        {
             return true;
-        } 
-        else if(data < node->data){
+        }
+        else if (data < node->data)
+        {
             return searchNode(node->left, data);
-        } 
-        else {
+        }
+        else
+        {
             return searchNode(node->right, data);
         }
     }
 
-    Node* deleteNode(Node* node, string& data) {
+    Node *deleteNode(Node *node, string &data)
+    {
 
-        if(node == NULL) {
+        if (node == NULL)
+        {
             return node;
         }
 
-        if(data < node->data) {
+        if (data < node->data)
+        {
             node->left = deleteNode(node->left, data);
-        } 
-        else if(data > node->data) {
+        }
+        else if (data > node->data)
+        {
             node->right = deleteNode(node->right, data);
-        } 
-        else {
+        }
+        else
+        {
             // Found the node to delete
 
             // Case 1: Node has no children or only one child
-            if(node->left == NULL || node->right == NULL){
-                Node* temp = node->left ? node->left : node->right;
-
+            if (node->left == NULL || node->right == NULL)
+            {
+                Node *temp = node->left ? node->left : node->right;
+                /*
+                Node* temp;
+        if (node->left) {
+            temp = node->left;
+        } else {
+            temp = node->right;
+        }
+                */
                 // No child case
-                if(temp == NULL){
+                if (temp == NULL)
+                {
                     temp = node;
                     node = NULL;
-                } 
-                else {
+                }
+                else
+                {
                     // One child case
                     *node = *temp;
                 }
 
                 delete temp;
-            } 
-            else {
+            }
+            else
+            {
                 // Case 2: Node has two children
-                Node* temp = findMinNode(node->right);
+                Node *temp = findMinNode(node->right);
                 node->data = temp->data;
                 node->right = deleteNode(node->right, temp->data);
             }
         }
 
         // If the tree had only one node
-        if(node == NULL){
+        if (node == NULL)
+        {
             return node;
         }
 
@@ -156,20 +197,26 @@ class AVLTree {
         node->balanceFactor = getHeight(node->left) - getHeight(node->right);
 
         // Perform rotations if necessary
-        if(node->balanceFactor > 1){
-            if(getHeight(node->left->left) >= getHeight(node->left->right)) { // Right Rotation
+        if (node->balanceFactor > 1)
+        {
+            if (getHeight(node->left->left) >= getHeight(node->left->right))
+            { // Right Rotation
                 node = rotateRight(node);
-            } 
-            else { // LR Rotation
+            }
+            else
+            { // LR Rotation
                 node->left = rotateLeft(node->left);
                 node = rotateRight(node);
             }
-        } 
-        else if(node->balanceFactor < -1){
-            if (getHeight(node->right->right) >= getHeight(node->right->left)) { // Left Rotation
+        }
+        else if (node->balanceFactor < -1)
+        {
+            if (getHeight(node->right->right) >= getHeight(node->right->left))
+            { // Left Rotation
                 node = rotateLeft(node);
-            } 
-            else { // RL Rotation
+            }
+            else
+            { // RL Rotation
                 node->right = rotateRight(node->right);
                 node = rotateLeft(node);
             }
@@ -178,9 +225,10 @@ class AVLTree {
         return node;
     }
 
-    void inorder(Node* node){
+    void inorder(Node *node)
+    {
 
-        if(node == NULL)
+        if (node == NULL)
             return;
 
         inorder(node->left);
@@ -190,15 +238,19 @@ class AVLTree {
         inorder(node->right);
     }
 
-    Node* findMinNode(Node* node) {
-        while(node->left != NULL){
+    Node *findMinNode(Node *node)
+    {
+        while (node->left != NULL)
+        {
             node = node->left;
         }
         return node;
     }
 
-    int getHeight(Node* node) {
-        if(node == NULL){
+    int getHeight(Node *node)
+    {
+        if (node == NULL)
+        {
             return 0;
         }
 
@@ -208,9 +260,10 @@ class AVLTree {
         return max(leftHeight, rightHeight) + 1;
     }
 
-    Node* rotateLeft(Node* node) {
-        
-        Node* newRoot = node->right;
+    Node *rotateLeft(Node *node)
+    {
+
+        Node *newRoot = node->right;
         node->right = newRoot->left;
         newRoot->left = node;
 
@@ -221,9 +274,10 @@ class AVLTree {
         return newRoot;
     }
 
-    Node* rotateRight(Node* node) {
+    Node *rotateRight(Node *node)
+    {
 
-        Node* newRoot = node->left;
+        Node *newRoot = node->left;
         node->left = newRoot->right;
         newRoot->right = node;
 
@@ -234,7 +288,8 @@ class AVLTree {
     }
 };
 
-int main() {
+int main()
+{
 
     AVLTree avlTree;
 
@@ -242,7 +297,8 @@ int main() {
     bool found = 0;
     string word = "";
 
-    while(choice != 5){
+    while (choice != 5)
+    {
         cout << "************* MENU *************\n";
         cout << "1. Insert Word\n";
         cout << "2. Search Word\n";
@@ -252,44 +308,49 @@ int main() {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch(choice){
-            case 1:
-                cout << "Enter word to Insert: ";
-                cin >> word;
-                avlTree.insert(word);
-                cout << "Word Added successfully.";
-                break;
-            case 2:
-                cout << "Enter word to Search: ";
-                cin >> word;
-                found = avlTree.search(word);
-                if(found) {
-                    cout << "Value found in the AVL tree.";
-                } 
-                else {
-                    cout << "Value not found in the AVL tree.";
-                }
-                break;
-            case 3:
-                cout << "Enter word to Delete: ";
-                cin >> word;
-                found = avlTree.search(word);
-                if(found) {
-                    avlTree.deleteNode(word);
-                    cout << "Word Deleted successfully.";
-                } 
-                else {
-                    cout << "Value not found in the AVL tree.";
-                }
-                break;
-            case 4:
-                avlTree.printSorted();
-                break;
-            case 5:
-                return 0;
-            default:
-                cout << "Invalid Choice.";
-                break;
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter word to Insert: ";
+            cin >> word;
+            avlTree.insert(word);
+            cout << "Word Added successfully.";
+            break;
+        case 2:
+            cout << "Enter word to Search: ";
+            cin >> word;
+            found = avlTree.search(word);
+            if (found)
+            {
+                cout << "Value found in the AVL tree.";
+            }
+            else
+            {
+                cout << "Value not found in the AVL tree.";
+            }
+            break;
+        case 3:
+            cout << "Enter word to Delete: ";
+            cin >> word;
+            found = avlTree.search(word);
+            if (found)
+            {
+                avlTree.deleteNode(word);
+                cout << "Word Deleted successfully.";
+            }
+            else
+            {
+                cout << "Value not found in the AVL tree.";
+            }
+            break;
+        case 4:
+            avlTree.printSorted();
+            break;
+        case 5:
+            return 0;
+        default:
+            cout << "Invalid Choice.";
+            break;
         }
         cout << "\n\n";
     }

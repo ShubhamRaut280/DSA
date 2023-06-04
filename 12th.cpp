@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include<vector>
 
 using namespace std;
 
@@ -8,7 +9,18 @@ struct Record {
     string name;
     int age;
 };
+vector<Record> retrieveRecords(const string& filename) {
+    ifstream inFile(filename, ios::binary);
+    vector<Record> records;
+    Record record;
 
+    while (inFile.read(reinterpret_cast<char*>(&record), sizeof(record))) {
+        records.push_back(record);
+    }
+
+    inFile.close();
+    return records;
+}
 // Function to insert a record into the direct access file
 void insertRecord(const Record& record, const string& filename) {
     ofstream outFile(filename, ios::binary | ios::app);
@@ -45,7 +57,15 @@ int main() {
     insertRecord(record3, "records.dat");
 
     // Deleting record with id 2
-    deleteRecord(2, "records.dat");
+    // deleteRecord(2, "records.dat");
+    vector<Record> records = retrieveRecords("records.dat");
+
+    for (const auto& record : records) {
+        cout << "Record ID: " << record.id << endl;
+        cout << "Name: " << record.name << endl;
+        cout << "Age: " << record.age << endl;
+        cout << endl;
+    }
 
     return 0;
 }

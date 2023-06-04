@@ -34,7 +34,7 @@ void Heap::upAdjust(bool m,int l)
 	int s;
 	if(!m)
 	{
-		while(minheap[(l-1)/2]<minheap[l])
+		while(minheap[(l-1)/2]>minheap[l])
 		{
 			s=minheap[l];
 			minheap[l]=minheap[(l-1)/2];
@@ -46,7 +46,7 @@ void Heap::upAdjust(bool m,int l)
 	}
 	else
 	{
-		while(maxheap[(l-1)/2]>maxheap[l])
+		while(maxheap[(l-1)/2]<maxheap[l])
 		{
 			s=maxheap[l];
 			maxheap[l]=maxheap[(l-1)/2];
@@ -57,7 +57,7 @@ void Heap::upAdjust(bool m,int l)
 		}
 	}
 }
-main()
+int main()
 {
 	Heap H;
 	H.get();

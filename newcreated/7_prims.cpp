@@ -82,6 +82,7 @@ int main()
     primsMST(graph, 0);
     return 0;
 }
+// sample inputs
 // 4 
 // 5
 // 0 1 10 

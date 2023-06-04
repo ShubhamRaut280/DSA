@@ -3,6 +3,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "iostream": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "array": "cpp",
+        "string": "cpp"
     }
 }
